@@ -2,6 +2,8 @@
 use Illuminate\Support\Facades\App;
 use Barryvdh\Snappy\Facades\SnappyImage;
 use Barryvdh\Snappy\Facades\SnappyPdf;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,6 +28,20 @@ Route::get('/', function () {
         array(
             'Content-Type'   =>'application/pdf',
             'Content-Disposition'  => 'attachment; filename="file.pdf"'
+        )
+    );
+});
+Route::get('/web', function (Request $request) {
+    $snappy = App::make('snappy.pdf');
+    $name = $request -> name;
+    $snappy->generate($name,'/tmp/web.pdf');
+    //output
+    return new \Illuminate\Http\Response(
+        $snappy->getOutput($name),
+        200,
+        array(
+            'Content-Type'   =>'application/pdf',
+            'Content-Disposition'  => 'attachment; filename="web.pdf"'
         )
     );
 });
